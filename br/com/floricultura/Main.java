@@ -2,13 +2,13 @@ package br.com.floricultura;
 
 import br.com.floricultura.repositorio.UsuarioRepositorio;
 import br.com.floricultura.controle.GerenciamentoUsuario;
-import br.com.floricultura.ui.FloriculturaUI;
+import br.com.floricultura.ui.AdminUI;
 
 public class Main {
     public static void main(String[] args) {
         UsuarioRepositorio repositorio = new UsuarioRepositorio();
         GerenciamentoUsuario controlador = new GerenciamentoUsuario(repositorio);
-        FloriculturaUI ui = new FloriculturaUI(controlador);
+        AdminUI ui = new AdminUI(controlador);
 
         ui.iniciar();
     }

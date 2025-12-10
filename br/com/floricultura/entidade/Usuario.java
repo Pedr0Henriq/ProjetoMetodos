@@ -18,6 +18,14 @@ public class Usuario {
         return senha;
     }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
     @Override
     public String toString() {
         return "Usuário{login='" + login + "'}";

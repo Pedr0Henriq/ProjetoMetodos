@@ -6,12 +6,12 @@ import br.com.floricultura.entidade.Usuario;
 import java.util.List;
 import java.util.Scanner;
 
-public class FloriculturaUI {
+public class AdminUI {
 
     private GerenciamentoUsuario controlador;
     private Scanner scanner;
 
-    public FloriculturaUI(GerenciamentoUsuario controlador) {
+    public AdminUI(GerenciamentoUsuario controlador) {
         this.controlador = controlador;
         this.scanner = new Scanner(System.in);
     }
