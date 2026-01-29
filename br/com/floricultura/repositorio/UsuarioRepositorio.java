@@ -1,23 +1,13 @@
 package br.com.floricultura.repositorio;
 
 import br.com.floricultura.entidade.Usuario;
-import java.util.ArrayList;
+
+import java.io.IOException;
 import java.util.List;
 
-public class UsuarioRepositorio {
+public interface UsuarioRepositorio {
 
-    // coleção em memória RAM
-    private List<Usuario> usuarios;
+    void salvar(Usuario usuario) throws IOException;
 
-    public UsuarioRepositorio() {
-        this.usuarios = new ArrayList<>();
-    }
-
-    public void salvar(Usuario usuario) {
-        usuarios.add(usuario);
-    }
-
-    public List<Usuario> buscarTodos() {
-        return usuarios;
-    }
+    List<Usuario> buscarTodos() throws IOException;
 }

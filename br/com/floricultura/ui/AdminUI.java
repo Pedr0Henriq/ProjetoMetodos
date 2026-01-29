@@ -2,7 +2,10 @@ package br.com.floricultura.ui;
 
 import br.com.floricultura.controle.GerenciamentoUsuario;
 import br.com.floricultura.entidade.Usuario;
+import br.com.floricultura.excecao.LoginInvalidoException;
+import br.com.floricultura.excecao.SenhaInvalidaException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -42,25 +45,44 @@ public class AdminUI {
     }
 
     private void cadastrarUsuario() {
-        System.out.print("Login do usuário: ");
+        System.out.println("\n--- Novo Cadastro ---");
+        System.out.print("Login: ");
         String login = scanner.nextLine();
 
-        System.out.print("Senha do usuário: ");
+        System.out.print("Senha: ");
         String senha = scanner.nextLine();
 
-        controlador.adicionarUsuario(login, senha);
-        System.out.println("Usuário cadastrado com sucesso!");
+        try {
+            controlador.adicionarUsuario(login, senha);
+            System.out.println("✅ Sucesso: Usuário cadastrado!");
+            
+        } catch (LoginInvalidoException e) {
+            System.out.println("❌ Erro de Login: " + e.getMessage());
+            
+        } catch (SenhaInvalidaException e) {
+            System.out.println("❌ Erro de Senha: " + e.getMessage());
+            System.out.println("   (Dica: Use maiúsculas, minúsculas, números e símbolos)");
+            
+        } catch (IOException e) {
+            System.out.println("❌ Erro no Disco: Não foi possível salvar o arquivo.");
+            e.printStackTrace();
+        }
     }
 
     private void listarUsuarios() {
-        List<Usuario> usuarios = controlador.listarUsuarios();
-        System.out.println("\n--- Lista de Usuários ---");
-        if (usuarios.isEmpty()) {
-            System.out.println("(Nenhum usuário cadastrado)");
-        } else {
-            for (Usuario u : usuarios) {
-                System.out.println(u);
+        try {
+            List<Usuario> usuarios = controlador.listarUsuarios();
+            System.out.println("\n--- Lista de Usuários ---");
+            
+            if (usuarios.isEmpty()) {
+                System.out.println("(Nenhum usuário cadastrado)");
+            } else {
+                for (Usuario u : usuarios) {
+                    System.out.println(u);
+                }
             }
+        } catch (IOException e) {
+            System.out.println("❌ Erro ao ler os dados: " + e.getMessage());
         }
     }
 }
