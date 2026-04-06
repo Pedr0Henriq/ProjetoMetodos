@@ -1,11 +1,10 @@
 package br.com.floricultura.ui;
 
 import br.com.floricultura.controle.FacadeSingletonController;
+import br.com.floricultura.controle.command.*;
 import br.com.floricultura.entidade.Produto;
 import br.com.floricultura.entidade.RegistroAcesso;
 import br.com.floricultura.entidade.Usuario;
-import br.com.floricultura.excecao.LoginInvalidoException;
-import br.com.floricultura.excecao.SenhaInvalidaException;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -78,12 +77,16 @@ public class AdminUI {
         System.out.print("Escolha: ");
     }
 
-    private void cadastrarUsuario() throws IOException, LoginInvalidoException, SenhaInvalidaException {
+    private void cadastrarUsuario() throws Exception {
         System.out.print("Login: ");
         String login = scanner.nextLine();
         System.out.print("Senha: ");
         String senha = scanner.nextLine();
-        controller.cadastrarUsuario(login, senha);
+        
+        // Padrão Command: Encapsula a requisição como um objeto
+        Comando comando = new CadastrarUsuarioCommand(controller.getGerUsuario(), login, senha);
+        controller.executarComando(comando);
+        
         System.out.println("Usuario cadastrado com sucesso.");
     }
 
@@ -99,7 +102,7 @@ public class AdminUI {
         }
     }
 
-    private void cadastrarProduto() throws IOException {
+    private void cadastrarProduto() throws Exception {
         System.out.print("Id: ");
         int id = Integer.parseInt(scanner.nextLine());
         System.out.print("Nome: ");
@@ -108,11 +111,15 @@ public class AdminUI {
         double preco = Double.parseDouble(scanner.nextLine());
         System.out.print("Quantidade em estoque: ");
         int quantidade = Integer.parseInt(scanner.nextLine());
-        controller.cadastrarProduto(id, nome, preco, quantidade);
+        
+        // Padrão Command: Encapsula a requisição como um objeto
+        Comando comando = new CadastrarProdutoCommand(controller.getGerProduto(), id, nome, preco, quantidade);
+        controller.executarComando(comando);
+        
         System.out.println("Produto cadastrado com sucesso.");
     }
 
-    private void atualizarProduto() throws IOException {
+    private void atualizarProduto() throws Exception {
         System.out.print("Id do produto: ");
         int id = Integer.parseInt(scanner.nextLine());
         System.out.print("Novo nome: ");
@@ -121,14 +128,22 @@ public class AdminUI {
         double preco = Double.parseDouble(scanner.nextLine());
         System.out.print("Nova quantidade em estoque: ");
         int quantidade = Integer.parseInt(scanner.nextLine());
-        controller.atualizarProduto(id, nome, preco, quantidade);
+        
+        // Padrão Command: Encapsula a requisição como um objeto
+        Comando comando = new AtualizarProdutoCommand(controller.getGerProduto(), id, nome, preco, quantidade);
+        controller.executarComando(comando);
+        
         System.out.println("Produto atualizado com sucesso.");
     }
 
-    private void removerProduto() throws IOException {
+    private void removerProduto() throws Exception {
         System.out.print("Id do produto a remover: ");
         int id = Integer.parseInt(scanner.nextLine());
-        controller.removerProduto(id);
+        
+        // Padrão Command: Encapsula a requisição como um objeto
+        Comando comando = new RemoverProdutoCommand(controller.getGerProduto(), id);
+        controller.executarComando(comando);
+        
         System.out.println("Produto removido com sucesso.");
     }
 

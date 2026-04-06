@@ -1,5 +1,6 @@
 package br.com.floricultura.controle;
 
+import br.com.floricultura.controle.command.Comando;
 import br.com.floricultura.entidade.Produto;
 import br.com.floricultura.entidade.Usuario;
 import br.com.floricultura.excecao.LoginInvalidoException;
@@ -43,14 +44,23 @@ public class FacadeSingletonController {
         gerAcesso  = GerenciamentoDeAcesso.getInstance();
     }
 
-    // ── Usuários ─────────────────────────────────────────────────────────────
+    // ── Padrão Command (Invocador) ────────────────────────────────────────────
 
-    public void cadastrarUsuario(String login, String senha)
-            throws LoginInvalidoException, SenhaInvalidaException, IOException {
+    /**
+     * Executa um comando encapsulado, repassando a ação para os Receivers.
+     */
+    public void executarComando(Comando comando) throws Exception {
         verificarInicializacao();
-        gerUsuario.cadastrar(login, senha);
+        comando.executar();
     }
 
+    // Getters necessários para a UI instanciar os comandos com os Receivers corretos
+    public GerenciamentoDeUsuario getGerUsuario() { return gerUsuario; }
+    public GerenciamentoDeProduto getGerProduto() { return gerProduto; }
+
+    // ── Usuários ─────────────────────────────────────────────────────────────
+
+    // Os métodos de escrita viraram Comandos. Mantemos apenas as consultas.
     public List<Usuario> listarUsuario() throws IOException {
         verificarInicializacao();
         return gerUsuario.listarTodos();
@@ -58,21 +68,7 @@ public class FacadeSingletonController {
 
     // ── Produtos ──────────────────────────────────────────────────────────────
 
-    public void cadastrarProduto(int id, String nome, double preco, int quantidadeEstoque) throws IOException {
-        verificarInicializacao();
-        gerProduto.cadastrarProduto(id, nome, preco, quantidadeEstoque);
-    }
-
-    public void atualizarProduto(int id, String nome, double preco, int quantidadeEstoque) throws IOException {
-        verificarInicializacao();
-        gerProduto.atualizarProduto(id, nome, preco, quantidadeEstoque);
-    }
-
-    public void removerProduto(int id) throws IOException {
-        verificarInicializacao();
-        gerProduto.removerProduto(id);
-    }
-
+    // Os métodos de escrita viraram Comandos. Mantemos apenas as consultas.
     public List<Produto> listarProdutos() throws IOException {
         verificarInicializacao();
         return gerProduto.listarProdutos();
