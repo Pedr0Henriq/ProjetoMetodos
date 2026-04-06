@@ -68,4 +68,22 @@ public class Produto implements Serializable {
                 ", preco=" + preco +
                 ", quantidadeEstoque=" + quantidadeEstoque + '}';
     }
+    // ── Padrão Memento (Originator) ───────────────────────────────────────────
+
+    /**
+     * Cria um memento com o estado atual do Produto antes de ser alterado.
+     */
+    public ProdutoMemento salvarEstado() {
+        return new ProdutoMemento(this.id, this.nome, this.preco, this.quantidadeEstoque);
+    }
+
+    /**
+     * Restaura o estado do Produto a partir de um memento guardado.
+     */
+    public void restaurarEstado(ProdutoMemento memento) {
+        this.id = memento.getId();
+        this.nome = memento.getNome();
+        this.preco = memento.getPreco();
+        this.quantidadeEstoque = memento.getQuantidadeEstoque();
+    }
 }

@@ -49,6 +49,7 @@ public class AdminUI {
                     case 7  -> mostrarQuantidadeEntidades();
                     case 8  -> listarAcessos();
                     case 9  -> gerarRelatorio();
+                    case 10 -> desfazerAtualizacao();
                     case 0  -> System.out.println("Encerrando o sistema...");
                     default -> System.out.println("Opcao invalida.");
                 }
@@ -73,6 +74,7 @@ public class AdminUI {
         System.out.println("7 - Quantidade total de entidades");
         System.out.println("8 - Listar acessos registrados");
         System.out.println("9 - Gerar relatorio de acessos");
+        System.out.println("10 - Desfazer última atualização de produto");
         System.out.println("0 - Sair");
         System.out.print("Escolha: ");
     }
@@ -203,6 +205,14 @@ public class AdminUI {
                 }
             }
             default -> System.out.println("Opcao invalida.");
+        }
+    }
+    private void desfazerAtualizacao() {
+        try {
+            controller.desfazerUltimaAtualizacao();
+            System.out.println("Sucesso! A ultima atualizacao foi desfeita. O produto voltou ao estado anterior.");
+        } catch (Exception e) {
+            System.out.println("Erro ao desfazer: " + e.getMessage());
         }
     }
 }

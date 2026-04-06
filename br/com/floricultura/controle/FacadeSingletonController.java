@@ -1,5 +1,6 @@
 package br.com.floricultura.controle;
 
+import br.com.floricultura.controle.command.AtualizarProdutoCommand;
 import br.com.floricultura.controle.command.Comando;
 import br.com.floricultura.entidade.Produto;
 import br.com.floricultura.entidade.Usuario;
@@ -20,6 +21,8 @@ public class FacadeSingletonController {
     private GerenciamentoDeUsuario  gerUsuario;
     private GerenciamentoDeProduto  gerProduto;
     private GerenciamentoDeAcesso   gerAcesso;
+    // Caretaker Global: Guarda o último comando executado
+    private Comando ultimoComando;
 
     private FacadeSingletonController() {
     }
@@ -52,6 +55,26 @@ public class FacadeSingletonController {
     public void executarComando(Comando comando) throws Exception {
         verificarInicializacao();
         comando.executar();
+        
+        // Padrão Memento: Se a ação foi uma ATUALIZAÇÃO, guardamos para permitir desfazer.
+        // Se foi outra coisa (ex: listar, cadastrar), limpamos a memória do desfazer.
+        if (comando instanceof AtualizarProdutoCommand) {
+            this.ultimoComando = comando;
+        } else {
+            this.ultimoComando = null; 
+        }
+    }
+
+    /**
+     * Padrão Memento: Aciona o desfazimento do último comando salvo.
+     */
+    public void desfazerUltimaAtualizacao() throws Exception {
+        if (ultimoComando != null) {
+            ultimoComando.desfazer(); // O comando sabe como desfazer a si mesmo, usando o memento que criou antes de executar a ação.
+            ultimoComando = null; // Limpa para permitir desfazer apenas 1 vez (1 nível)
+        } else {
+            throw new IllegalStateException("Não há nenhuma atualização recente para desfazer.");
+        }
     }
 
     // Getters necessários para a UI instanciar os comandos com os Receivers corretos
