@@ -18,6 +18,11 @@ public class GerenciamentoDeProduto {
         this.logger = new LoggerAdapter(); // usa o Adapter — não conhece a biblioteca externa
     }
 
+    /** Expõe o repositório subjacente para permitir registros de Observer/integração. */
+    public RepositorioProduto getRepositorio() {
+        return repositorio;
+    }
+
     public void cadastrarProduto(int id, String nome, double preco, int quantidadeEstoque) throws IOException {
         Produto produto = new Produto(id, nome, preco, quantidadeEstoque);
         repositorio.salvar(produto);

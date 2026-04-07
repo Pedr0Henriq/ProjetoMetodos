@@ -13,6 +13,7 @@ public class RepositorioMemoriaFactory extends RepositorioFactory {
 
     @Override
     public RepositorioProduto criarRepositorioProduto() {
-        return new RepositorioProdutoMemoria();
+        // Envolve o repositório real com um proxy que controla acesso
+        return new RepositorioProdutoProxy(new RepositorioProdutoMemoria());
     }
 }

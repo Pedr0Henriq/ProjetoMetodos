@@ -1,6 +1,9 @@
 package br.com.floricultura.ui;
 
 import br.com.floricultura.controle.FacadeSingletonController;
+import br.com.floricultura.observer.Observer;
+import br.com.floricultura.observer.Subject;
+import br.com.floricultura.repositorio.RepositorioProduto;
 import br.com.floricultura.controle.command.*;
 import br.com.floricultura.entidade.Produto;
 import br.com.floricultura.entidade.RegistroAcesso;
@@ -12,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
-public class AdminUI {
+public class AdminUI implements Observer {
 
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
@@ -22,6 +25,15 @@ public class AdminUI {
     public AdminUI(FacadeSingletonController controller) {
         this.controller = controller;
         this.scanner = new Scanner(System.in);
+        // Se o repositório suportar observers, registra esta UI para receber atualizações
+        try {
+            RepositorioProduto repo = controller.getGerProduto().getRepositorio();
+            if (repo instanceof Subject) {
+                ((Subject) repo).registrar(this);
+            }
+        } catch (Exception ignored) {
+            // Não fatal: apenas significa que não foi possível registrar observer
+        }
     }
 
     public void iniciar() {
@@ -159,6 +171,11 @@ public class AdminUI {
         for (Produto p : produtos) {
             System.out.println(p);
         }
+    }
+
+    @Override
+    public void atualizar(List<Produto> produtos) {
+        System.out.println("[NOTIFICAÇÃO] Repositório de produtos alterado. Total agora: " + produtos.size());
     }
 
     private void mostrarQuantidadeEntidades() throws IOException {

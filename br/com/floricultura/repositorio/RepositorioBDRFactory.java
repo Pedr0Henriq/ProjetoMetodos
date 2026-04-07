@@ -13,6 +13,7 @@ public class RepositorioBDRFactory extends RepositorioFactory {
 
     @Override
     public RepositorioProduto criarRepositorioProduto() {
-        return new RepositorioProdutoBDR();
+        // Envolve o repositório real com um proxy que controla acesso
+        return new RepositorioProdutoProxy(new RepositorioProdutoBDR());
     }
 }
